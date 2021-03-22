@@ -86,6 +86,12 @@ function Homepage() {
 		setMainListTodo(tmpListTodo);
 	};
 
+	const handleEdit = (index, value) => {
+		const tmpListTodo = [...mainListTodo];
+		tmpListTodo[index].name = value;
+		setMainListTodo(tmpListTodo);
+	};
+
 	useEffect(() => {
 		const tmpListTodo = [...mainListTodo];
 		if (newTodo) {
@@ -98,6 +104,7 @@ function Homepage() {
 	}, [newTodo]);
 
 	useEffect(() => {
+		const localStorage = window.localStorage;
 		let countSuccess = mainListTodo.length;
 		let minSuccess = false;
 		_.forEach(mainListTodo, (todo) => {
@@ -116,7 +123,20 @@ function Homepage() {
 		setCountSuccess(countSuccess);
 
 		setListTodo(mainListTodo);
+		localStorage.setItem('todos', JSON.stringify(mainListTodo));
 	}, [mainListTodo]);
+
+	useEffect(() => {
+		const localStorage = window.localStorage;
+		const dataLocal = localStorage.getItem('todos');
+		if (dataLocal) {
+			setMainListTodo(JSON.parse(dataLocal));
+		}
+
+		return () => {
+			localStorage.setItem('todos', JSON.stringify(mainListTodo));
+		};
+	}, []);
 
 	return (
 		<HomepageContent>
@@ -133,6 +153,7 @@ function Homepage() {
 						<TodoItem
 							callbackSuccess={handleSuccess}
 							callbackDelete={handleDelete}
+							callbackEdit={handleEdit}
 							key={index}
 							todo={item}
 							index={index}

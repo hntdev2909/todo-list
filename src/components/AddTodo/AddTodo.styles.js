@@ -15,6 +15,10 @@ const AddTodoButton = styled.span`
 	padding: 0 10px;
 	opacity: ${(props) => props.opacity};
 	visibility: ${(props) => props.visible};
+
+	&:hover {
+		cursor: pointer;
+	}
 `;
 
 const AddTodoInput = styled.input`

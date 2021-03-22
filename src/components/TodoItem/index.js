@@ -5,9 +5,20 @@ import {
 	TodoItemContent,
 	TodoImg,
 	DeleteIcon,
+	TodoInput,
+	TodoItemDiv,
 } from './TodoItem.styles';
 
-function TodoItem({ todo, index, callbackSuccess, callbackDelete }) {
+function TodoItem({
+	todo,
+	index,
+	callbackSuccess,
+	callbackDelete,
+	callbackEdit,
+}) {
+	const [isEdit, setIsEdit] = useState(false);
+	const [editValue, setEditValue] = useState('');
+
 	const handleClickSuccess = (index) => {
 		callbackSuccess(index);
 	};
@@ -16,10 +27,25 @@ function TodoItem({ todo, index, callbackSuccess, callbackDelete }) {
 		callbackDelete(index);
 	};
 
+	const handleEdit = (value) => {
+		setEditValue(value);
+		setIsEdit(!isEdit);
+	};
+
+	const handleSubmitEdit = (e) => {
+		if (e.keyCode === 13) {
+			if (editValue.trim()) {
+				callbackEdit(index, editValue);
+				setIsEdit(!isEdit);
+			}
+		}
+	};
+
 	return (
 		<TodoItemContent>
 			<TodoIcon marginLeft="10px" onClick={() => handleClickSuccess(index)}>
 				<TodoImg
+					opacity="0.5"
 					width="35px"
 					height="35px"
 					src="https://www.flaticon.com/svg/vstatic/svg/3515/3515278.svg?token=exp=1616387853~hmac=ae7f970157d4309690a093a214e951cc"
@@ -34,12 +60,22 @@ function TodoItem({ todo, index, callbackSuccess, callbackDelete }) {
 					/>
 				)}
 			</TodoIcon>
-			<TodoItemText
-				color={todo.isFinished ? '#ccc' : '#000'}
-				line={todo.isFinished ? 'line-through' : 'none'}
-			>
-				{todo.name}
-			</TodoItemText>
+			<TodoItemDiv onDoubleClick={() => handleEdit(todo.name)}>
+				{isEdit ? (
+					<TodoInput
+						onKeyDown={(e) => handleSubmitEdit(e)}
+						onChange={(e) => setEditValue(e.target.value)}
+						value={editValue}
+					/>
+				) : (
+					<TodoItemText
+						color={todo.isFinished ? '#ccc' : '#000'}
+						line={todo.isFinished ? 'line-through' : 'none'}
+					>
+						{todo.name}
+					</TodoItemText>
+				)}
+			</TodoItemDiv>
 			<DeleteIcon display="none" onClick={() => handleDeleteTodo(index)}>
 				<TodoImg
 					width="15px"

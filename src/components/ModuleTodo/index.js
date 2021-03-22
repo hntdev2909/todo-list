@@ -7,7 +7,7 @@ import {
 } from './ModuleTodo.styles';
 
 function ModuleTodo({ count, clear, callback, callbackView }) {
-	const [borderActive, setBorderActive] = useState(true);
+	const [borderActive, setBorderActive] = useState('all');
 
 	const clearComplete = () => {
 		callback('clear');
@@ -15,7 +15,6 @@ function ModuleTodo({ count, clear, callback, callbackView }) {
 
 	const handleView = (action) => {
 		setBorderActive(action);
-		console.log(action);
 		callbackView(action);
 	};
 
@@ -30,7 +29,7 @@ function ModuleTodo({ count, clear, callback, callbackView }) {
 					<ModuleTodoText
 						margin="0 4px"
 						padding="0 4px"
-						border={borderActive == 'all' ? '#ccc' : ''}
+						border={borderActive === 'all' ? '#ccc' : ''}
 						onClick={() => handleView('all')}
 						hoverBorder={'1px solid #ddd'}
 					>
@@ -39,7 +38,7 @@ function ModuleTodo({ count, clear, callback, callbackView }) {
 					<ModuleTodoText
 						margin="0 4px"
 						padding="0 4px"
-						border={borderActive == 'active' ? '#ccc' : ''}
+						border={borderActive === 'active' ? '#ccc' : ''}
 						onClick={() => handleView('active')}
 						hoverBorder={'1px solid #ddd'}
 					>
@@ -48,7 +47,7 @@ function ModuleTodo({ count, clear, callback, callbackView }) {
 					<ModuleTodoText
 						margin="0 4px"
 						padding="0 4px"
-						border={borderActive == 'completed' ? '#ccc' : ''}
+						border={borderActive === 'completed' ? '#ccc' : ''}
 						hoverBorder={'1px solid #ddd'}
 						onClick={() => handleView('completed')}
 					>

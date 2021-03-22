@@ -1,13 +1,12 @@
 import React, { useState } from 'react';
 import {
 	AddTodoContent,
-	AddTodoIcon,
 	AddTodoInput,
 	AddTodoButton,
 	AddTodoImg,
 } from './AddTodo.styles';
 
-function AddTodo({ callback, callbackSelectAll, length }) {
+function AddTodo({ callback, callbackSelectAll, length, inputRef }) {
 	const [valueInput, setValueInput] = useState('');
 	const [isSelectAll, setIsSelectAll] = useState(false);
 
@@ -46,6 +45,7 @@ function AddTodo({ callback, callbackSelectAll, length }) {
 				></AddTodoImg>
 			</AddTodoButton>
 			<AddTodoInput
+				ref={inputRef}
 				onKeyDown={(e) => handleSubmitTodo(e)}
 				onChange={(e) => setValueInput(e.target.value)}
 				placeholder="What needs to be done?"

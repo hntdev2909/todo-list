@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { HomepageContent, HomepageTitle, MainTodo } from './Homepage.styles';
 import { AddTodo, TodoItem, ModuleTodo } from '../../components';
 import _ from 'lodash';
@@ -9,6 +9,7 @@ function Homepage() {
 	const [countSuccess, setCountSuccess] = useState(0);
 	const [clearSuccess, setClearSuccess] = useState(false);
 	const [mainListTodo, setMainListTodo] = useState([]);
+	const inputRef = useRef(null);
 
 	const handleAddNewToDo = (value) => {
 		setNewTodo(value);
@@ -110,6 +111,8 @@ function Homepage() {
 		if (dataLocal) {
 			setMainListTodo(JSON.parse(dataLocal));
 		}
+
+		inputRef.current.focus();
 		console.log('mounted', mainListTodo);
 	}, []);
 
@@ -143,6 +146,7 @@ function Homepage() {
 
 			<MainTodo>
 				<AddTodo
+					inputRef={inputRef}
 					callback={handleAddNewToDo}
 					callbackSelectAll={handleSelectAll}
 					length={mainListTodo.length}

@@ -100,8 +100,18 @@ function Homepage() {
 				isFinished: false,
 			});
 		}
+		console.log('updated New Todo', mainListTodo);
 		setMainListTodo(tmpListTodo);
 	}, [newTodo]);
+
+	useEffect(() => {
+		const localStorage = window.localStorage;
+		const dataLocal = localStorage.getItem('todos');
+		if (dataLocal) {
+			setMainListTodo(JSON.parse(dataLocal));
+		}
+		console.log('mounted', mainListTodo);
+	}, []);
 
 	useEffect(() => {
 		const localStorage = window.localStorage;
@@ -124,19 +134,8 @@ function Homepage() {
 
 		setListTodo(mainListTodo);
 		localStorage.setItem('todos', JSON.stringify(mainListTodo));
+		console.log('updated mainList', mainListTodo);
 	}, [mainListTodo]);
-
-	useEffect(() => {
-		const localStorage = window.localStorage;
-		const dataLocal = localStorage.getItem('todos');
-		if (dataLocal) {
-			setMainListTodo(JSON.parse(dataLocal));
-		}
-
-		return () => {
-			localStorage.setItem('todos', JSON.stringify(mainListTodo));
-		};
-	}, []);
 
 	return (
 		<HomepageContent>

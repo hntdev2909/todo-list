@@ -126,6 +126,7 @@ function Homepage() {
 				<AddTodo
 					callback={handleAddNewToDo}
 					callbackSelectAll={handleSelectAll}
+					length={mainListTodo.length}
 				/>
 				{_.map(listTodo, (item, index) => {
 					return (
@@ -138,12 +139,14 @@ function Homepage() {
 						/>
 					);
 				})}
-				<ModuleTodo
-					count={countSuccess}
-					clear={clearSuccess}
-					callback={handleClearSuccess}
-					callbackView={handleView}
-				/>
+				{mainListTodo.length > 0 && (
+					<ModuleTodo
+						count={countSuccess}
+						clear={clearSuccess}
+						callback={handleClearSuccess}
+						callbackView={handleView}
+					/>
+				)}
 			</MainTodo>
 		</HomepageContent>
 	);

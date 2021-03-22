@@ -7,7 +7,7 @@ import {
 	AddTodoImg,
 } from './AddTodo.styles';
 
-function AddTodo({ callback, callbackSelectAll }) {
+function AddTodo({ callback, callbackSelectAll, length }) {
 	const [valueInput, setValueInput] = useState('');
 	const [isSelectAll, setIsSelectAll] = useState(false);
 
@@ -35,6 +35,7 @@ function AddTodo({ callback, callbackSelectAll }) {
 	return (
 		<AddTodoContent>
 			<AddTodoButton
+				visible={length ? 'visible' : 'hidden'}
 				opacity={isSelectAll ? '1' : '0.2'}
 				onClick={handleFinishAll}
 			>

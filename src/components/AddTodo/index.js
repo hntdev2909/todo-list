@@ -7,8 +7,9 @@ import {
 	AddTodoImg,
 } from './AddTodo.styles';
 
-function AddTodo({ callback }) {
+function AddTodo({ callback, callbackSelectAll }) {
 	const [valueInput, setValueInput] = useState('');
+	const [isSelectAll, setIsSelectAll] = useState(false);
 
 	const handleSubmitTodo = (e) => {
 		if (e.keyCode === 13) {
@@ -21,9 +22,22 @@ function AddTodo({ callback }) {
 		}
 	};
 
+	const handleFinishAll = () => {
+		if (isSelectAll) {
+			setIsSelectAll(false);
+			callbackSelectAll(false);
+		} else {
+			setIsSelectAll(true);
+			callbackSelectAll(true);
+		}
+	};
+
 	return (
 		<AddTodoContent>
-			<AddTodoButton>
+			<AddTodoButton
+				opacity={isSelectAll ? '1' : '0.2'}
+				onClick={handleFinishAll}
+			>
 				<AddTodoImg
 					width="20px"
 					height="20px"

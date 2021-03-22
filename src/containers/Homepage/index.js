@@ -15,31 +15,31 @@ function Homepage() {
 	};
 
 	const handleSuccess = (index) => {
-		const tmpListTodo = [...listTodo];
+		const tmpListTodo = [...mainListTodo];
 		const valOfIndex = tmpListTodo[index];
 		tmpListTodo.splice(index, 1);
 		tmpListTodo.splice(index, 0, {
 			name: valOfIndex.name,
 			isFinished: !valOfIndex.isFinished,
 		});
-		setListTodo(tmpListTodo);
+		setMainListTodo(tmpListTodo);
 	};
 
 	const handleDelete = (index) => {
-		const tmpListTodo = [...listTodo];
+		const tmpListTodo = [...mainListTodo];
 		tmpListTodo.splice(index, 1);
-		setListTodo(tmpListTodo);
+		setMainListTodo(tmpListTodo);
 	};
 
 	const handleClearSuccess = () => {
-		const tmpListTodo = [...listTodo];
+		const tmpListTodo = [...mainListTodo];
 		const newList = [];
 		_.forEach(tmpListTodo, (todo, index) => {
 			if (!todo.isFinished) {
 				newList.push(todo);
 			}
 		});
-		setListTodo(newList);
+		setMainListTodo(newList);
 	};
 
 	const handleView = (action) => {
@@ -56,6 +56,7 @@ function Homepage() {
 				}
 			});
 			setListTodo(newList);
+			setClearSuccess(false);
 		}
 
 		if (action === 'completed') {
@@ -65,11 +66,28 @@ function Homepage() {
 				}
 			});
 			setListTodo(newList);
+
+			setClearSuccess(true);
 		}
 	};
 
+	const handleSelectAll = (type) => {
+		const tmpListTodo = [...mainListTodo];
+		console.log(type);
+		if (type) {
+			_.map(tmpListTodo, (item) => {
+				return (item.isFinished = true);
+			});
+		} else {
+			_.map(tmpListTodo, (item) => {
+				return (item.isFinished = false);
+			});
+		}
+		setMainListTodo(tmpListTodo);
+	};
+
 	useEffect(() => {
-		const tmpListTodo = [...listTodo];
+		const tmpListTodo = [...mainListTodo];
 		if (newTodo) {
 			tmpListTodo.push({
 				name: newTodo,
@@ -77,19 +95,18 @@ function Homepage() {
 			});
 		}
 		setMainListTodo(tmpListTodo);
-		setListTodo(tmpListTodo);
 	}, [newTodo]);
 
 	useEffect(() => {
-		let countSuccess = listTodo.length;
+		let countSuccess = mainListTodo.length;
 		let minSuccess = false;
-		_.forEach(listTodo, (todo) => {
+		_.forEach(mainListTodo, (todo) => {
 			if (todo.isFinished) {
 				countSuccess -= 1;
 			}
 		});
 
-		_.every(listTodo, (item) => {
+		_.every(mainListTodo, (item) => {
 			if (item.isFinished) {
 				return (minSuccess = true);
 			}
@@ -97,14 +114,19 @@ function Homepage() {
 
 		setClearSuccess(minSuccess);
 		setCountSuccess(countSuccess);
-	}, [listTodo]);
+
+		setListTodo(mainListTodo);
+	}, [mainListTodo]);
 
 	return (
 		<HomepageContent>
 			<HomepageTitle>todos</HomepageTitle>
 
 			<MainTodo>
-				<AddTodo callback={handleAddNewToDo} />
+				<AddTodo
+					callback={handleAddNewToDo}
+					callbackSelectAll={handleSelectAll}
+				/>
 				{_.map(listTodo, (item, index) => {
 					return (
 						<TodoItem

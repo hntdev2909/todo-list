@@ -13,6 +13,7 @@ const AddTodoButton = styled.span`
 	width: 40px;
 	height: 100%;
 	padding: 0 10px;
+	opacity: ${(props) => props.opacity};
 `;
 
 const AddTodoInput = styled.input`

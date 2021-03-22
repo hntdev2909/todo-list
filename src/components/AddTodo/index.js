@@ -5,6 +5,7 @@ import {
 	AddTodoButton,
 	AddTodoImg,
 } from './AddTodo.styles';
+import { Icons } from '../../themes';
 
 function AddTodo({ callback, callbackSelectAll, length, inputRef }) {
 	const [valueInput, setValueInput] = useState('');
@@ -41,7 +42,7 @@ function AddTodo({ callback, callbackSelectAll, length, inputRef }) {
 				<AddTodoImg
 					width="20px"
 					height="20px"
-					src="https://www.flaticon.com/svg/vstatic/svg/892/892498.svg?token=exp=1616388972~hmac=ebe7fb7c068c8449683ece4ed9cf7cf4"
+					src={Icons.downArrowIcon.default}
 				></AddTodoImg>
 			</AddTodoButton>
 			<AddTodoInput

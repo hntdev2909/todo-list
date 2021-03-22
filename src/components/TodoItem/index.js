@@ -8,6 +8,7 @@ import {
 	TodoInput,
 	TodoItemDiv,
 } from './TodoItem.styles';
+import { Icons } from '../../themes';
 
 function TodoItem({
 	todo,
@@ -48,7 +49,7 @@ function TodoItem({
 					opacity="0.5"
 					width="35px"
 					height="35px"
-					src="https://www.flaticon.com/svg/vstatic/svg/3515/3515278.svg?token=exp=1616387853~hmac=ae7f970157d4309690a093a214e951cc"
+					src={Icons.circleIcon.default}
 				/>
 
 				{todo.isFinished && (
@@ -56,7 +57,7 @@ function TodoItem({
 						position="absolute"
 						width="20px"
 						height="20px"
-						src="https://www.flaticon.com/svg/vstatic/svg/1828/1828643.svg?token=exp=1616399481~hmac=e96976151fbe6f442b52e0d64e26875a"
+						src={Icons.checkIcon.default}
 					/>
 				)}
 			</TodoIcon>
@@ -80,7 +81,7 @@ function TodoItem({
 				<TodoImg
 					width="15px"
 					height="15px"
-					src="https://www.flaticon.com/svg/vstatic/svg/864/864393.svg?token=exp=1616387834~hmac=981ac7942cb2534a7a35b7b70e18eaa2"
+					src={Icons.cancelIcon.default}
 				></TodoImg>
 			</DeleteIcon>
 		</TodoItemContent>

@@ -1,8 +1,8 @@
 const Icons = {
-	cancelIcon: '../assets/images/cancel.svg',
-	checkIcon: '../assets/images/check.png',
-	downArrowIcon: '../assets/images/down-arrow.svg',
-	circleIcon: '../assets/images/dry-clean.svg',
+	cancelIcon: require('../assets/images/close.svg'),
+	checkIcon: require('../assets/images/check.svg'),
+	downArrowIcon: require('../assets/images/down-arrow.svg'),
+	circleIcon: require('../assets/images/circle.svg'),
 };
 
-export default { Icons };
+export default Icons;

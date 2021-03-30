@@ -5,17 +5,40 @@ import {
 	ModuleTodoList,
 	ModuleTodoItem,
 } from './ModuleTodo.styles';
+import _ from 'lodash';
+import { useDispatch, useSelector } from 'react-redux';
+import { clearTaskCompleted } from '../../actions';
 
-function ModuleTodo({ count, clear, callback, callbackView }) {
+function ModuleTodo({ count, clear, callback }) {
 	const [borderActive, setBorderActive] = useState('all');
+	const tasks = useSelector((state) => state.todos);
 
-	const clearComplete = () => {
-		callback('clear');
-	};
+	const dispatch = useDispatch();
 
 	const handleView = (action) => {
 		setBorderActive(action);
-		callbackView(action);
+		const tmpTasks = [...tasks];
+		let newList = [];
+		if (action === 'all') {
+			newList = [...tmpTasks];
+		}
+
+		if (action === 'active') {
+			_.forEach(tmpTasks, (todo) => {
+				if (!todo.isCompleted) {
+					newList.push(todo);
+				}
+			});
+		}
+
+		if (action === 'completed') {
+			_.forEach(tmpTasks, (todo) => {
+				if (todo.isCompleted) {
+					newList.push(todo);
+				}
+			});
+		}
+		callback(newList);
 	};
 
 	return (
@@ -55,7 +78,7 @@ function ModuleTodo({ count, clear, callback, callbackView }) {
 					</ModuleTodoText>
 				</ModuleTodoItem>
 				<ModuleTodoItem visible={clear ? 'visible' : 'hidden'}>
-					<ModuleTodoText onClick={clearComplete}>
+					<ModuleTodoText onClick={() => dispatch(clearTaskCompleted())}>
 						Clear complete
 					</ModuleTodoText>
 				</ModuleTodoItem>

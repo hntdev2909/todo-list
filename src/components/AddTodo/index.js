@@ -5,17 +5,22 @@ import {
 	AddTodoButton,
 	AddTodoImg,
 } from './AddTodo.styles';
+import { useSelector, useDispatch } from 'react-redux';
 import { Icons } from '../../themes';
+import { addTodos, changeTypeAll } from '../../actions';
 
-function AddTodo({ callback, callbackSelectAll, length, inputRef }) {
+function AddTodo({ inputRef }) {
 	const [valueInput, setValueInput] = useState('');
 	const [isSelectAll, setIsSelectAll] = useState(false);
+
+	const dispatch = useDispatch();
+	const tasks = useSelector((state) => state.todos);
 
 	const handleSubmitTodo = (e) => {
 		if (e.keyCode === 13) {
 			if (valueInput.trim()) {
 				setValueInput('');
-				callback(valueInput);
+				dispatch(addTodos(valueInput));
 			} else {
 				setValueInput('');
 			}
@@ -23,19 +28,14 @@ function AddTodo({ callback, callbackSelectAll, length, inputRef }) {
 	};
 
 	const handleFinishAll = () => {
-		if (isSelectAll) {
-			setIsSelectAll(false);
-			callbackSelectAll(false);
-		} else {
-			setIsSelectAll(true);
-			callbackSelectAll(true);
-		}
+		dispatch(changeTypeAll(!isSelectAll));
+		setIsSelectAll(!isSelectAll);
 	};
 
 	return (
 		<AddTodoContent>
 			<AddTodoButton
-				visible={length ? 'visible' : 'hidden'}
+				visible={tasks.length ? 'visible' : 'hidden'}
 				opacity={isSelectAll ? '1' : '0.2'}
 				onClick={handleFinishAll}
 			>

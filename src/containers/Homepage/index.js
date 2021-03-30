@@ -2,6 +2,8 @@ import React, { useEffect, useState, useRef } from 'react';
 import { HomepageContent, HomepageTitle, MainTodo } from './Homepage.styles';
 import { AddTodo, TodoItem, ModuleTodo } from '../../components';
 import _ from 'lodash';
+import { useSelector, useDispatch } from 'react-redux';
+import { loadData } from '../../actions';
 
 function Homepage() {
 	const [newTodo, setNewTodo] = useState('');
@@ -10,27 +12,8 @@ function Homepage() {
 	const [clearSuccess, setClearSuccess] = useState(false);
 	const [mainListTodo, setMainListTodo] = useState([]);
 	const inputRef = useRef(null);
-
-	const handleAddNewToDo = (value) => {
-		setNewTodo(value);
-	};
-
-	const handleSuccess = (index) => {
-		const tmpListTodo = [...mainListTodo];
-		const valOfIndex = tmpListTodo[index];
-		tmpListTodo.splice(index, 1);
-		tmpListTodo.splice(index, 0, {
-			name: valOfIndex.name,
-			isFinished: !valOfIndex.isFinished,
-		});
-		setMainListTodo(tmpListTodo);
-	};
-
-	const handleDelete = (index) => {
-		const tmpListTodo = [...mainListTodo];
-		tmpListTodo.splice(index, 1);
-		setMainListTodo(tmpListTodo);
-	};
+	const todos = useSelector((state) => state.todos);
+	const dispatch = useDispatch();
 
 	const handleClearSuccess = () => {
 		const tmpListTodo = [...mainListTodo];
@@ -43,132 +26,56 @@ function Homepage() {
 		setMainListTodo(newList);
 	};
 
-	const handleView = (action) => {
-		const tmpListTodo = [...mainListTodo];
-		const newList = [];
-		if (action === 'all') {
-			setListTodo(tmpListTodo);
-		}
-
-		if (action === 'active') {
-			_.forEach(tmpListTodo, (todo) => {
-				if (!todo.isFinished) {
-					newList.push(todo);
-				}
-			});
-			setListTodo(newList);
-			setClearSuccess(false);
-		}
-
-		if (action === 'completed') {
-			_.forEach(tmpListTodo, (todo) => {
-				if (todo.isFinished) {
-					newList.push(todo);
-				}
-			});
-			setListTodo(newList);
-
-			setClearSuccess(true);
-		}
+	const handleChangeView = (action) => {
+		setListTodo(action);
 	};
-
-	const handleSelectAll = (type) => {
-		const tmpListTodo = [...mainListTodo];
-		console.log(type);
-		if (type) {
-			_.map(tmpListTodo, (item) => {
-				return (item.isFinished = true);
-			});
-		} else {
-			_.map(tmpListTodo, (item) => {
-				return (item.isFinished = false);
-			});
-		}
-		setMainListTodo(tmpListTodo);
-	};
-
-	const handleEdit = (index, value) => {
-		const tmpListTodo = [...mainListTodo];
-		tmpListTodo[index].name = value;
-		setMainListTodo(tmpListTodo);
-	};
-
-	useEffect(() => {
-		const tmpListTodo = [...mainListTodo];
-		if (newTodo) {
-			tmpListTodo.push({
-				name: newTodo,
-				isFinished: false,
-			});
-		}
-		console.log('updated New Todo', mainListTodo);
-		setMainListTodo(tmpListTodo);
-	}, [newTodo]);
 
 	useEffect(() => {
 		const localStorage = window.localStorage;
 		const dataLocal = localStorage.getItem('todos');
 		if (dataLocal) {
-			setMainListTodo(JSON.parse(dataLocal));
+			dispatch(loadData(JSON.parse(dataLocal)));
 		}
 
 		inputRef.current.focus();
-		console.log('mounted', mainListTodo);
 	}, []);
 
 	useEffect(() => {
 		const localStorage = window.localStorage;
-		let countSuccess = mainListTodo.length;
+		let countSuccess = todos.length;
 		let minSuccess = false;
-		_.forEach(mainListTodo, (todo) => {
-			if (todo.isFinished) {
+		_.forEach(todos, (todo) => {
+			if (todo.isCompleted) {
 				countSuccess -= 1;
 			}
 		});
 
-		_.every(mainListTodo, (item) => {
-			if (item.isFinished) {
+		_.every(todos, (item) => {
+			if (item.isCompleted) {
 				return (minSuccess = true);
 			}
 		});
 
 		setClearSuccess(minSuccess);
 		setCountSuccess(countSuccess);
-
-		setListTodo(mainListTodo);
-		localStorage.setItem('todos', JSON.stringify(mainListTodo));
-		console.log('updated mainList', mainListTodo);
-	}, [mainListTodo]);
+		setListTodo(todos);
+		localStorage.setItem('todos', JSON.stringify(todos));
+	}, [todos]);
 
 	return (
 		<HomepageContent>
 			<HomepageTitle>todos</HomepageTitle>
 
 			<MainTodo>
-				<AddTodo
-					inputRef={inputRef}
-					callback={handleAddNewToDo}
-					callbackSelectAll={handleSelectAll}
-					length={mainListTodo.length}
-				/>
+				<AddTodo inputRef={inputRef} />
 				{_.map(listTodo, (item, index) => {
-					return (
-						<TodoItem
-							callbackSuccess={handleSuccess}
-							callbackDelete={handleDelete}
-							callbackEdit={handleEdit}
-							key={index}
-							todo={item}
-							index={index}
-						/>
-					);
+					return <TodoItem key={index} todo={item} index={index} />;
 				})}
-				{mainListTodo.length > 0 && (
+				{todos.length > 0 && (
 					<ModuleTodo
+						callback={handleChangeView}
 						count={countSuccess}
 						clear={clearSuccess}
-						callback={handleClearSuccess}
-						callbackView={handleView}
 					/>
 				)}
 			</MainTodo>

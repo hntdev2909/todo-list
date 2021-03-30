@@ -9,24 +9,14 @@ import {
 	TodoItemDiv,
 } from './TodoItem.styles';
 import { Icons } from '../../themes';
+import { changeType, deleteTask, editTask } from '../../actions';
+import { useDispatch } from 'react-redux';
 
-function TodoItem({
-	todo,
-	index,
-	callbackSuccess,
-	callbackDelete,
-	callbackEdit,
-}) {
+function TodoItem({ todo, index }) {
 	const [isEdit, setIsEdit] = useState(false);
 	const [editValue, setEditValue] = useState('');
 
-	const handleClickSuccess = (index) => {
-		callbackSuccess(index);
-	};
-
-	const handleDeleteTodo = (index) => {
-		callbackDelete(index);
-	};
+	const dispatch = useDispatch();
 
 	const handleEdit = (value) => {
 		setEditValue(value);
@@ -36,7 +26,7 @@ function TodoItem({
 	const handleSubmitEdit = (e) => {
 		if (e.keyCode === 13) {
 			if (editValue.trim()) {
-				callbackEdit(index, editValue);
+				dispatch(editTask({ index, editValue }));
 				setIsEdit(!isEdit);
 			}
 		}
@@ -44,7 +34,7 @@ function TodoItem({
 
 	return (
 		<TodoItemContent>
-			<TodoIcon marginLeft="10px" onClick={() => handleClickSuccess(index)}>
+			<TodoIcon marginLeft="10px" onClick={() => dispatch(changeType(index))}>
 				<TodoImg
 					opacity="0.5"
 					width="35px"
@@ -52,7 +42,7 @@ function TodoItem({
 					src={Icons.circleIcon.default}
 				/>
 
-				{todo.isFinished && (
+				{todo.isCompleted && (
 					<TodoImg
 						position="absolute"
 						width="20px"
@@ -61,7 +51,7 @@ function TodoItem({
 					/>
 				)}
 			</TodoIcon>
-			<TodoItemDiv onDoubleClick={() => handleEdit(todo.name)}>
+			<TodoItemDiv onDoubleClick={() => handleEdit(todo.content)}>
 				{isEdit ? (
 					<TodoInput
 						onKeyDown={(e) => handleSubmitEdit(e)}
@@ -70,14 +60,14 @@ function TodoItem({
 					/>
 				) : (
 					<TodoItemText
-						color={todo.isFinished ? '#ccc' : '#000'}
-						line={todo.isFinished ? 'line-through' : 'none'}
+						color={todo.isCompleted ? '#ccc' : '#000'}
+						line={todo.isCompleted ? 'line-through' : 'none'}
 					>
-						{todo.name}
+						{todo.content}
 					</TodoItemText>
 				)}
 			</TodoItemDiv>
-			<DeleteIcon display="none" onClick={() => handleDeleteTodo(index)}>
+			<DeleteIcon display="none" onClick={() => dispatch(deleteTask(index))}>
 				<TodoImg
 					width="15px"
 					height="15px"

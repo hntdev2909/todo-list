@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
 	AddTodoContent,
 	AddTodoInput,
@@ -8,6 +8,7 @@ import {
 import { useSelector, useDispatch } from 'react-redux';
 import { Icons } from '../../themes';
 import { addTodos, changeTypeAll } from '../../actions';
+import { API } from '../../api/tasksAPI';
 
 function AddTodo({ inputRef }) {
 	const [valueInput, setValueInput] = useState('');
@@ -20,7 +21,9 @@ function AddTodo({ inputRef }) {
 		if (e.keyCode === 13) {
 			if (valueInput.trim()) {
 				setValueInput('');
-				dispatch(addTodos(valueInput));
+				API.createNewTask(valueInput)
+					.then((res) => dispatch(addTodos(res.data)))
+					.catch((err) => console.log('Error', err));
 			} else {
 				setValueInput('');
 			}
@@ -30,7 +33,19 @@ function AddTodo({ inputRef }) {
 	const handleFinishAll = () => {
 		dispatch(changeTypeAll(!isSelectAll));
 		setIsSelectAll(!isSelectAll);
+		API.editTypeAll({ isCompleted: !isSelectAll })
+			.then(() => console.log('Change success'))
+			.catch(() => console.log('Change fail'));
 	};
+
+	useEffect(() => {
+		let checkAll = tasks.every((task) => task.isCompleted === true);
+		if (checkAll) {
+			setIsSelectAll(true);
+		} else {
+			setIsSelectAll(false);
+		}
+	}, [tasks]);
 
 	return (
 		<AddTodoContent>

@@ -11,12 +11,18 @@ import {
 import { Icons } from '../../themes';
 import { changeType, deleteTask, editTask } from '../../actions';
 import { useDispatch } from 'react-redux';
+import { API } from '../../api/tasksAPI';
 
-function TodoItem({ todo, index }) {
+function TodoItem({ todo, id }) {
 	const [isEdit, setIsEdit] = useState(false);
 	const [editValue, setEditValue] = useState('');
 
 	const dispatch = useDispatch();
+
+	const handleCompleted = (id) => {
+		dispatch(changeType(id));
+		API.editLisTask(id, { isCompleted: todo.isCompleted });
+	};
 
 	const handleEdit = (value) => {
 		setEditValue(value);
@@ -26,15 +32,21 @@ function TodoItem({ todo, index }) {
 	const handleSubmitEdit = (e) => {
 		if (e.keyCode === 13) {
 			if (editValue.trim()) {
-				dispatch(editTask({ index, editValue }));
+				dispatch(editTask({ id, editValue }));
 				setIsEdit(!isEdit);
+				API.editLisTask(id, { content: editValue });
 			}
 		}
 	};
 
+	const handleDeleteTask = () => {
+		dispatch(deleteTask(id));
+		API.deleteTask(id);
+	};
+
 	return (
 		<TodoItemContent>
-			<TodoIcon marginLeft="10px" onClick={() => dispatch(changeType(index))}>
+			<TodoIcon marginLeft="10px" onClick={() => handleCompleted(id)}>
 				<TodoImg
 					opacity="0.5"
 					width="35px"
@@ -67,7 +79,7 @@ function TodoItem({ todo, index }) {
 					</TodoItemText>
 				)}
 			</TodoItemDiv>
-			<DeleteIcon display="none" onClick={() => dispatch(deleteTask(index))}>
+			<DeleteIcon display="none" onClick={() => handleDeleteTask()}>
 				<TodoImg
 					width="15px"
 					height="15px"

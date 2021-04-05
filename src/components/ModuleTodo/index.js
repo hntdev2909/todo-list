@@ -8,6 +8,7 @@ import {
 import _ from 'lodash';
 import { useDispatch, useSelector } from 'react-redux';
 import { clearTaskCompleted } from '../../actions';
+import { API } from '../../api/tasksAPI';
 
 function ModuleTodo({ count, clear, callback }) {
 	const [borderActive, setBorderActive] = useState('all');
@@ -39,6 +40,13 @@ function ModuleTodo({ count, clear, callback }) {
 			});
 		}
 		callback(newList);
+	};
+
+	const handleClearAll = () => {
+		dispatch(clearTaskCompleted());
+		API.deleteAll()
+			.then(() => console.log('Delete success'))
+			.catch(() => console.log('Delete fail'));
 	};
 
 	return (
@@ -78,7 +86,7 @@ function ModuleTodo({ count, clear, callback }) {
 					</ModuleTodoText>
 				</ModuleTodoItem>
 				<ModuleTodoItem visible={clear ? 'visible' : 'hidden'}>
-					<ModuleTodoText onClick={() => dispatch(clearTaskCompleted())}>
+					<ModuleTodoText onClick={() => handleClearAll()}>
 						Clear complete
 					</ModuleTodoText>
 				</ModuleTodoItem>

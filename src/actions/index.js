@@ -37,7 +37,7 @@ export const editTask = (value) => {
 	return {
 		type: 'editTask',
 		payload: {
-			index: value.index,
+			id: value.id,
 			content: value.editValue,
 		},
 	};

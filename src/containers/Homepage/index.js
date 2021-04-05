@@ -4,44 +4,29 @@ import { AddTodo, TodoItem, ModuleTodo } from '../../components';
 import _ from 'lodash';
 import { useSelector, useDispatch } from 'react-redux';
 import { loadData } from '../../actions';
+import { API } from '../../api/tasksAPI';
 
 function Homepage() {
-	const [newTodo, setNewTodo] = useState('');
 	const [listTodo, setListTodo] = useState([]);
 	const [countSuccess, setCountSuccess] = useState(0);
 	const [clearSuccess, setClearSuccess] = useState(false);
-	const [mainListTodo, setMainListTodo] = useState([]);
 	const inputRef = useRef(null);
 	const todos = useSelector((state) => state.todos);
 	const dispatch = useDispatch();
-
-	const handleClearSuccess = () => {
-		const tmpListTodo = [...mainListTodo];
-		const newList = [];
-		_.forEach(tmpListTodo, (todo, index) => {
-			if (!todo.isFinished) {
-				newList.push(todo);
-			}
-		});
-		setMainListTodo(newList);
-	};
 
 	const handleChangeView = (action) => {
 		setListTodo(action);
 	};
 
 	useEffect(() => {
-		const localStorage = window.localStorage;
-		const dataLocal = localStorage.getItem('todos');
-		if (dataLocal) {
-			dispatch(loadData(JSON.parse(dataLocal)));
-		}
+		API.callListTask()
+			.then((res) => dispatch(loadData(res.data)))
+			.catch((err) => err);
 
 		inputRef.current.focus();
 	}, []);
 
 	useEffect(() => {
-		const localStorage = window.localStorage;
 		let countSuccess = todos.length;
 		let minSuccess = false;
 		_.forEach(todos, (todo) => {
@@ -50,7 +35,7 @@ function Homepage() {
 			}
 		});
 
-		_.every(todos, (item) => {
+		_.some(todos, (item) => {
 			if (item.isCompleted) {
 				return (minSuccess = true);
 			}
@@ -59,7 +44,6 @@ function Homepage() {
 		setClearSuccess(minSuccess);
 		setCountSuccess(countSuccess);
 		setListTodo(todos);
-		localStorage.setItem('todos', JSON.stringify(todos));
 	}, [todos]);
 
 	return (
@@ -69,7 +53,7 @@ function Homepage() {
 			<MainTodo>
 				<AddTodo inputRef={inputRef} />
 				{_.map(listTodo, (item, index) => {
-					return <TodoItem key={index} todo={item} index={index} />;
+					return <TodoItem key={index} todo={item} id={item._id} />;
 				})}
 				{todos.length > 0 && (
 					<ModuleTodo

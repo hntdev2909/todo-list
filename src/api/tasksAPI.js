@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const baseUrl = 'http://localhost:5000/todolist';
+const baseUrl = 'https://server-intern-idra.herokuapp.com/todolist';
 
 export const API = {
 	async callListTask() {

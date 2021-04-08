@@ -40,6 +40,7 @@ function TodoItem({ todo, id }) {
 	};
 
 	const handleDeleteTask = () => {
+		console.log(id);
 		dispatch(deleteTask(id));
 		API.deleteTask(id);
 	};

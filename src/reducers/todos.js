@@ -27,8 +27,10 @@ const addTodosReducer = (state = initialState, action) => {
 
 		case 'deleteTask': // DONE
 			const tmpState = [...state];
-			tmpState.splice(action.payload, 1);
-			return [...tmpState];
+			const tmpTaskDelete = tmpState.filter((task) => {
+				return task._id !== action.payload;
+			});
+			return [...tmpTaskDelete];
 
 		case 'editTask': // DONE
 			let indexTmpTask = state.findIndex(

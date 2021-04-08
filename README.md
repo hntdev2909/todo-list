@@ -1,6 +1,6 @@
 # TODOs App with ReactJs
 
-A mini project to understand more about State and Props between components in ReactJs and using Nodejs + Express to call API when create, edit or delete
+A mini project to understand more about State and Props between components in ReactJs and using Nodejs + Express to call API with CRUD functions like create, edit or delete
 
 ## Install , package and libraries
 

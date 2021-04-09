@@ -27,7 +27,7 @@ function TodoItem({ todo, id }) {
 
 	const handleCompleted = (id) => {
 		dispatch(callingServer());
-		API.editLisTask(id, { isCompleted: todo.isCompleted })
+		API.editLisTask(id, { isCompleted: !todo.isCompleted })
 			.then(() => {
 				dispatch(changeType(id));
 				dispatch(calledServer());

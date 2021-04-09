@@ -7,7 +7,12 @@ import {
 } from './ModuleTodo.styles';
 import _ from 'lodash';
 import { useDispatch, useSelector } from 'react-redux';
-import { clearTaskCompleted } from '../../actions';
+import {
+	loadData,
+	clearTaskCompleted,
+	callingServer,
+	calledServer,
+} from '../../actions';
 import { API } from '../../api/tasksAPI';
 
 function ModuleTodo({ count, clear, callback }) {
@@ -17,35 +22,27 @@ function ModuleTodo({ count, clear, callback }) {
 	const dispatch = useDispatch();
 
 	const handleView = (action) => {
-		setBorderActive(action);
-		const tmpTasks = [...tasks];
-		let newList = [];
-		if (action === 'all') {
-			newList = [...tmpTasks];
+		if (borderActive === action) {
+			return;
+		} else {
+			dispatch(callingServer());
+			API.filtersType(action)
+				.then((res) => {
+					dispatch(loadData(res.data));
+					dispatch(calledServer());
+					setBorderActive(action);
+				})
+				.catch(() => console.log('FAIL'));
 		}
-
-		if (action === 'active') {
-			_.forEach(tmpTasks, (todo) => {
-				if (!todo.isCompleted) {
-					newList.push(todo);
-				}
-			});
-		}
-
-		if (action === 'completed') {
-			_.forEach(tmpTasks, (todo) => {
-				if (todo.isCompleted) {
-					newList.push(todo);
-				}
-			});
-		}
-		callback(newList);
 	};
 
 	const handleClearAll = () => {
-		dispatch(clearTaskCompleted());
+		dispatch(callingServer());
 		API.deleteAll()
-			.then(() => console.log('Delete success'))
+			.then(() => {
+				dispatch(clearTaskCompleted());
+				dispatch(calledServer());
+			})
 			.catch(() => console.log('Delete fail'));
 	};
 

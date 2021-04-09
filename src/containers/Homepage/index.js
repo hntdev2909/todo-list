@@ -79,13 +79,11 @@ function Homepage() {
 						return <TodoItem key={index} todo={item} id={item._id} />;
 					})}
 				</TodoList>
-				{todos.length > 0 && (
-					<ModuleTodo
-						callback={handleChangeView}
-						count={countSuccess}
-						clear={clearSuccess}
-					/>
-				)}
+				<ModuleTodo
+					callback={handleChangeView}
+					count={countSuccess}
+					clear={clearSuccess}
+				/>
 			</MainTodo>
 		</HomepageContent>
 	);

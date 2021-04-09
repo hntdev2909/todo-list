@@ -1,6 +1,8 @@
-I'm testing pull request
+# Tasks
 
-..............
+- Spinner when create new task, edit, delete and change filters
+- Filters should call to server to change it
+- Fix call API in action
 
 # TODOs App with ReactJs
 

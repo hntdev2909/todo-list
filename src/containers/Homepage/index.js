@@ -4,6 +4,7 @@ import {
 	HomepageTitle,
 	MainTodo,
 	Loading,
+	TodoList,
 } from './Homepage.styles';
 import { AddTodo, TodoItem, ModuleTodo, Spinner } from '../../components';
 import _ from 'lodash';
@@ -15,21 +16,23 @@ function Homepage() {
 	const [listTodo, setListTodo] = useState([]);
 	const [countSuccess, setCountSuccess] = useState(0);
 	const [clearSuccess, setClearSuccess] = useState(false);
-	const [isLoading, setIsLoading] = useState(false);
+	const [isLoadingData, setIsLoadingData] = useState(false);
 	const inputRef = useRef(null);
 	const todos = useSelector((state) => state.todos);
 	const dispatch = useDispatch();
+
+	const { isLoading } = useSelector((state) => state.loading);
 
 	const handleChangeView = (action) => {
 		setListTodo(action);
 	};
 
 	useEffect(() => {
-		setIsLoading(true);
+		setIsLoadingData(true);
 		API.callListTask()
 			.then((res) => {
 				dispatch(loadData(res.data));
-				setIsLoading(false);
+				setIsLoadingData(false);
 			})
 			.catch((err) => err);
 
@@ -58,19 +61,24 @@ function Homepage() {
 
 	return (
 		<HomepageContent>
-			{isLoading && (
+			{isLoadingData && (
 				<Loading>
 					<Spinner />
 				</Loading>
 			)}
-
 			<HomepageTitle>todos</HomepageTitle>
-
 			<MainTodo>
+				{isLoading && (
+					<Loading>
+						<Spinner />
+					</Loading>
+				)}
 				<AddTodo inputRef={inputRef} />
-				{_.map(listTodo, (item, index) => {
-					return <TodoItem key={index} todo={item} id={item._id} />;
-				})}
+				<TodoList>
+					{_.map(listTodo, (item, index) => {
+						return <TodoItem key={index} todo={item} id={item._id} />;
+					})}
+				</TodoList>
 				{todos.length > 0 && (
 					<ModuleTodo
 						callback={handleChangeView}

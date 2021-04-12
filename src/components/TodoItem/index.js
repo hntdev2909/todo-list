@@ -9,7 +9,7 @@ import {
 	TodoItemDiv,
 } from './TodoItem.styles';
 import { Icons } from '../../themes';
-import { isFinish, isEditTask, isDeleteTask } from '../../actions';
+import { changeType, editTask, deleteTask } from '../../actions';
 import { useDispatch } from 'react-redux';
 
 function TodoItem({ todo, id }) {
@@ -19,7 +19,7 @@ function TodoItem({ todo, id }) {
 	const dispatch = useDispatch();
 
 	const handleCompleted = (id) => {
-		dispatch(isFinish(id, { isCompleted: !todo.isCompleted }));
+		dispatch(changeType(id, { isCompleted: !todo.isCompleted }));
 	};
 
 	const handleEdit = (value) => {
@@ -31,14 +31,14 @@ function TodoItem({ todo, id }) {
 		if (e.keyCode === 13) {
 			if (editValue) {
 				editValue.trim();
-				dispatch(isEditTask(id, { content: editValue }));
+				dispatch(editTask(id, { content: editValue }));
 				setIsEdit(!isEdit);
 			}
 		}
 	};
 
 	const handleDeleteTask = () => {
-		dispatch(isDeleteTask(id));
+		dispatch(deleteTask(id));
 	};
 
 	return (

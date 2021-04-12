@@ -7,7 +7,7 @@ import {
 } from './AddTodo.styles';
 import { useSelector, useDispatch } from 'react-redux';
 import { Icons } from '../../themes';
-import { createTask, isFinishAll } from '../../actions';
+import { createTask, changeTypeAll } from '../../actions';
 
 function AddTodo({ inputRef }) {
 	const [valueInput, setValueInput] = useState('');
@@ -29,7 +29,7 @@ function AddTodo({ inputRef }) {
 	};
 
 	const handleFinishAll = () => {
-		dispatch(isFinishAll({ isCompleted: !isSelectAll }));
+		dispatch(changeTypeAll({ isCompleted: !isSelectAll }));
 		setIsSelectAll(!isSelectAll);
 	};
 

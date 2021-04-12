@@ -9,7 +9,7 @@ import {
 import { AddTodo, TodoItem, ModuleTodo, Spinner } from '../../components';
 import _ from 'lodash';
 import { useSelector, useDispatch } from 'react-redux';
-import { loadDB } from '../../actions';
+import { loadData } from '../../actions';
 
 function Homepage() {
 	const [listTodo, setListTodo] = useState([]);
@@ -26,7 +26,7 @@ function Homepage() {
 	};
 
 	useEffect(() => {
-		dispatch(loadDB());
+		dispatch(loadData());
 
 		inputRef.current.focus();
 	}, []);

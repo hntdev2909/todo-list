@@ -1,24 +1,24 @@
 import { callingServer, calledServer } from './LoadingActions';
 import {
-	loadDB,
+	loadData,
+	editTask,
 	createTask,
-	isFinishAll,
-	isFinish,
-	isEditTask,
-	isDeleteTask,
-	isFilter,
-	isClearFinish,
+	changeType,
+	changeTypeAll,
+	deleteTask,
+	filters,
+	clearTask,
 } from './TodoActions';
 
 export {
 	callingServer,
 	calledServer,
-	loadDB,
+	loadData,
+	editTask,
 	createTask,
-	isFinishAll,
-	isFinish,
-	isEditTask,
-	isDeleteTask,
-	isFilter,
-	isClearFinish,
+	changeType,
+	changeTypeAll,
+	deleteTask,
+	filters,
+	clearTask,
 };

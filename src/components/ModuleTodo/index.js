@@ -7,8 +7,7 @@ import {
 } from './ModuleTodo.styles';
 import _ from 'lodash';
 import { useDispatch, useSelector } from 'react-redux';
-import { isFilter, isClearFinish } from '../../actions';
-import { API } from '../../api/tasksAPI';
+import { filters, clearTask } from '../../actions';
 
 function ModuleTodo({ count, clear, callback }) {
 	const [borderActive, setBorderActive] = useState('all');
@@ -19,13 +18,13 @@ function ModuleTodo({ count, clear, callback }) {
 		if (borderActive === action) {
 			return;
 		} else {
-			dispatch(isFilter(action));
+			dispatch(filters(action));
 			setBorderActive(action);
 		}
 	};
 
 	const handleClearAll = () => {
-		dispatch(isClearFinish());
+		dispatch(clearTask());
 	};
 
 	return (

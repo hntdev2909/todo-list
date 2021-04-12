@@ -10,42 +10,42 @@ import {
 } from '../constants/nameTypes';
 import { calledServer, callingServer } from './LoadingActions';
 
-const loadData = (value) => {
+const loadDataAction = (value) => {
 	return {
 		type: LOAD_DATA,
 		payload: value,
 	};
 };
 
-const addTodos = (value) => {
+const addTodosAction = (value) => {
 	return {
 		type: ADD_TODOS,
 		payload: value,
 	};
 };
 
-const changeType = (value) => {
+const changeTypeAction = (value) => {
 	return {
 		type: CHANGE_TYPE,
 		payload: value,
 	};
 };
 
-const changeTypeAll = (value) => {
+const changeTypeAllAction = (value) => {
 	return {
 		type: CHANGE_TYPE_ALL,
 		payload: value,
 	};
 };
 
-const deleteTask = (value) => {
+const deleteTaskAction = (value) => {
 	return {
 		type: DELETE_TASK,
 		payload: value,
 	};
 };
 
-const editTask = (value) => {
+const editTaskAction = (value) => {
 	console.log(value);
 	return {
 		type: EDIT_TASK,
@@ -56,7 +56,7 @@ const editTask = (value) => {
 	};
 };
 
-const clearTaskCompleted = () => {
+const clearTaskCompletedAction = () => {
 	return {
 		type: CLEAR_TASK_COMPLETED,
 	};
@@ -64,12 +64,12 @@ const clearTaskCompleted = () => {
 
 // middleware
 
-const loadDB = (param) => {
+const loadData = (param) => {
 	return (dispatch) => {
 		dispatch(callingServer());
 		API.callListTask(param)
 			.then((res) => {
-				dispatch(loadData(res.data));
+				dispatch(loadDataAction(res.data));
 				dispatch(calledServer());
 			})
 			.catch((err) => {
@@ -84,7 +84,7 @@ const createTask = (value) => {
 		dispatch(callingServer());
 		API.createNewTask(value)
 			.then((res) => {
-				dispatch(addTodos(res.data));
+				dispatch(addTodosAction(res.data));
 				dispatch(calledServer());
 			})
 			.catch((err) => {
@@ -94,12 +94,12 @@ const createTask = (value) => {
 	};
 };
 
-const isFinishAll = (value) => {
+const changeTypeAll = (value) => {
 	return (dispatch) => {
 		dispatch(callingServer());
 		API.editTypeAll(value)
 			.then(() => {
-				dispatch(changeTypeAll(value.isCompleted));
+				dispatch(changeTypeAllAction(value.isCompleted));
 				dispatch(calledServer());
 			})
 			.catch(() => {
@@ -109,12 +109,12 @@ const isFinishAll = (value) => {
 	};
 };
 
-const isFinish = (id, value) => {
+const changeType = (id, value) => {
 	return (dispatch) => {
 		dispatch(callingServer());
 		API.editLisTask(id, value)
 			.then(() => {
-				dispatch(changeType(id));
+				dispatch(changeTypeAction(id));
 				dispatch(calledServer());
 			})
 			.catch((err) => {
@@ -124,12 +124,12 @@ const isFinish = (id, value) => {
 	};
 };
 
-const isEditTask = (id, value) => {
+const editTask = (id, value) => {
 	return (dispatch) => {
 		dispatch(callingServer());
 		API.editLisTask(id, value)
 			.then(() => {
-				dispatch(editTask({ id, value }));
+				dispatch(editTaskAction({ id, value }));
 				dispatch(calledServer());
 			})
 			.catch(() => {
@@ -139,12 +139,12 @@ const isEditTask = (id, value) => {
 	};
 };
 
-const isDeleteTask = (id) => {
+const deleteTask = (id) => {
 	return (dispatch) => {
 		dispatch(callingServer());
 		API.deleteTask(id)
 			.then(() => {
-				dispatch(deleteTask(id));
+				dispatch(deleteTaskAction(id));
 				dispatch(calledServer());
 			})
 			.catch(() => {
@@ -154,12 +154,12 @@ const isDeleteTask = (id) => {
 	};
 };
 
-const isFilter = (action) => {
+const filters = (action) => {
 	return (dispatch) => {
 		dispatch(callingServer());
 		API.filtersType(action)
 			.then((res) => {
-				dispatch(loadData(res.data));
+				dispatch(loadDataAction(res.data));
 				dispatch(calledServer());
 			})
 			.catch(() => {
@@ -169,12 +169,12 @@ const isFilter = (action) => {
 	};
 };
 
-const isClearFinish = () => {
+const clearTask = () => {
 	return (dispatch) => {
 		dispatch(callingServer());
 		API.deleteAll()
 			.then(() => {
-				dispatch(clearTaskCompleted());
+				dispatch(clearTaskCompletedAction());
 				dispatch(calledServer());
 			})
 			.catch(() => {
@@ -185,12 +185,12 @@ const isClearFinish = () => {
 };
 
 export {
-	loadDB,
+	loadData,
+	editTask,
 	createTask,
-	isFinishAll,
-	isFinish,
-	isEditTask,
-	isDeleteTask,
-	isFilter,
-	isClearFinish,
+	changeType,
+	changeTypeAll,
+	deleteTask,
+	filters,
+	clearTask,
 };

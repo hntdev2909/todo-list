@@ -1,11 +1,15 @@
-export const callingServer = () => {
+import { CALLING_SERVER, CALLED_SERVER } from '../constants/nameTypes';
+
+const callingServer = () => {
 	return {
-		type: 'CALLING_SERVER',
+		type: CALLING_SERVER,
 	};
 };
 
-export const calledServer = () => {
+const calledServer = () => {
 	return {
-		type: 'CALLED_SERVER',
+		type: CALLED_SERVER,
 	};
 };
+
+export { callingServer, calledServer };

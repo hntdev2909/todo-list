@@ -9,6 +9,7 @@ import {
 	filters,
 	clearTask,
 } from './TodoActions';
+import { loadingSuccess, loadingFailure } from './AlertActions';
 
 export {
 	callingServer,
@@ -21,4 +22,6 @@ export {
 	deleteTask,
 	filters,
 	clearTask,
+	loadingSuccess,
+	loadingFailure,
 };

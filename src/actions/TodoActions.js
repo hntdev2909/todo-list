@@ -1,3 +1,4 @@
+import { loadingSuccess } from '.';
 import { API } from '../api/tasksAPI';
 import {
 	LOAD_DATA,
@@ -8,6 +9,7 @@ import {
 	EDIT_TASK,
 	CLEAR_TASK_COMPLETED,
 } from '../constants/nameTypes';
+import { loadingFailure } from './AlertActions';
 import { calledServer, callingServer } from './LoadingActions';
 
 const loadDataAction = (value) => {
@@ -71,10 +73,11 @@ const loadData = (param) => {
 			.then((res) => {
 				dispatch(loadDataAction(res.data));
 				dispatch(calledServer());
+				dispatch(loadingSuccess());
 			})
 			.catch((err) => {
-				console.log(err);
 				dispatch(calledServer());
+				dispatch(loadingFailure());
 			});
 	};
 };
@@ -86,10 +89,11 @@ const createTask = (value) => {
 			.then((res) => {
 				dispatch(addTodosAction(res.data));
 				dispatch(calledServer());
+				dispatch(loadingSuccess());
 			})
 			.catch((err) => {
-				console.log(err);
 				dispatch(calledServer());
+				dispatch(loadingFailure());
 			});
 	};
 };
@@ -101,10 +105,11 @@ const changeTypeAll = (value) => {
 			.then(() => {
 				dispatch(changeTypeAllAction(value.isCompleted));
 				dispatch(calledServer());
+				dispatch(loadingSuccess());
 			})
 			.catch(() => {
-				console.log('Change fail');
 				dispatch(calledServer());
+				dispatch(loadingFailure());
 			});
 	};
 };
@@ -116,10 +121,11 @@ const changeType = (id, value) => {
 			.then(() => {
 				dispatch(changeTypeAction(id));
 				dispatch(calledServer());
+				dispatch(loadingSuccess());
 			})
 			.catch((err) => {
-				console.log('Err', err);
 				dispatch(calledServer());
+				dispatch(loadingFailure());
 			});
 	};
 };
@@ -131,10 +137,11 @@ const editTask = (id, value) => {
 			.then(() => {
 				dispatch(editTaskAction({ id, value }));
 				dispatch(calledServer());
+				dispatch(loadingSuccess());
 			})
 			.catch(() => {
-				console.log('Err');
 				dispatch(calledServer());
+				dispatch(loadingFailure());
 			});
 	};
 };
@@ -146,10 +153,11 @@ const deleteTask = (id) => {
 			.then(() => {
 				dispatch(deleteTaskAction(id));
 				dispatch(calledServer());
+				dispatch(loadingSuccess());
 			})
 			.catch(() => {
-				console.log('Err delete');
 				dispatch(calledServer());
+				dispatch(loadingFailure());
 			});
 	};
 };
@@ -161,10 +169,11 @@ const filters = (action) => {
 			.then((res) => {
 				dispatch(loadDataAction(res.data));
 				dispatch(calledServer());
+				dispatch(loadingSuccess());
 			})
 			.catch(() => {
-				console.log('Err');
 				dispatch(calledServer());
+				dispatch(loadingFailure());
 			});
 	};
 };
@@ -176,10 +185,11 @@ const clearTask = () => {
 			.then(() => {
 				dispatch(clearTaskCompletedAction());
 				dispatch(calledServer());
+				dispatch(loadingSuccess());
 			})
 			.catch(() => {
-				console.log('Delete fail');
 				dispatch(calledServer());
+				dispatch(loadingFailure());
 			});
 	};
 };

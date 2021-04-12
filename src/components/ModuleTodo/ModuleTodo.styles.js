@@ -44,7 +44,7 @@ const ModuleTodoContent = styled.div`
 		position: absolute;
 		width: 530px;
 		height: 5px;
-		border: 1px solid #eee;
+		border: 1px solid #ccc;
 		background-color: white;
 		top: 100%;
 		left: 50%;

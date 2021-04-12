@@ -9,14 +9,12 @@ import {
 import { AddTodo, TodoItem, ModuleTodo, Spinner } from '../../components';
 import _ from 'lodash';
 import { useSelector, useDispatch } from 'react-redux';
-import { loadData } from '../../actions';
-import { API } from '../../api/tasksAPI';
+import { loadDB } from '../../actions';
 
 function Homepage() {
 	const [listTodo, setListTodo] = useState([]);
 	const [countSuccess, setCountSuccess] = useState(0);
 	const [clearSuccess, setClearSuccess] = useState(false);
-	const [isLoadingData, setIsLoadingData] = useState(false);
 	const inputRef = useRef(null);
 	const todos = useSelector((state) => state.todos);
 	const dispatch = useDispatch();
@@ -28,13 +26,7 @@ function Homepage() {
 	};
 
 	useEffect(() => {
-		setIsLoadingData(true);
-		API.callListTask()
-			.then((res) => {
-				dispatch(loadData(res.data));
-				setIsLoadingData(false);
-			})
-			.catch((err) => err);
+		dispatch(loadDB());
 
 		inputRef.current.focus();
 	}, []);
@@ -61,11 +53,6 @@ function Homepage() {
 
 	return (
 		<HomepageContent>
-			{isLoadingData && (
-				<Loading>
-					<Spinner />
-				</Loading>
-			)}
 			<HomepageTitle>todos</HomepageTitle>
 			<MainTodo>
 				{isLoading && (

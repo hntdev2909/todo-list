@@ -9,15 +9,8 @@ import {
 	TodoItemDiv,
 } from './TodoItem.styles';
 import { Icons } from '../../themes';
-import {
-	callingServer,
-	calledServer,
-	changeType,
-	deleteTask,
-	editTask,
-} from '../../actions';
+import { isFinish, isEditTask, isDeleteTask } from '../../actions';
 import { useDispatch } from 'react-redux';
-import { API } from '../../api/tasksAPI';
 
 function TodoItem({ todo, id }) {
 	const [isEdit, setIsEdit] = useState(false);
@@ -26,13 +19,7 @@ function TodoItem({ todo, id }) {
 	const dispatch = useDispatch();
 
 	const handleCompleted = (id) => {
-		dispatch(callingServer());
-		API.editLisTask(id, { isCompleted: !todo.isCompleted })
-			.then(() => {
-				dispatch(changeType(id));
-				dispatch(calledServer());
-			})
-			.catch((err) => console.log('err', err));
+		dispatch(isFinish(id, { isCompleted: !todo.isCompleted }));
 	};
 
 	const handleEdit = (value) => {
@@ -42,27 +29,16 @@ function TodoItem({ todo, id }) {
 
 	const handleSubmitEdit = (e) => {
 		if (e.keyCode === 13) {
-			if (editValue.trim()) {
-				dispatch(callingServer());
-				API.editLisTask(id, { content: editValue })
-					.then(() => {
-						dispatch(editTask({ id, editValue }));
-						setIsEdit(!isEdit);
-						dispatch(calledServer());
-					})
-					.catch(() => console.log('Err'));
+			if (editValue) {
+				editValue.trim();
+				dispatch(isEditTask(id, { content: editValue }));
+				setIsEdit(!isEdit);
 			}
 		}
 	};
 
 	const handleDeleteTask = () => {
-		dispatch(callingServer());
-		API.deleteTask(id)
-			.then(() => {
-				dispatch(deleteTask(id));
-				dispatch(calledServer());
-			})
-			.catch(() => console.log('Err'));
+		dispatch(isDeleteTask(id));
 	};
 
 	return (

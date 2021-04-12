@@ -4,18 +4,10 @@ import {
 	AddTodoInput,
 	AddTodoButton,
 	AddTodoImg,
-	AddTodoLoading,
 } from './AddTodo.styles';
-import { Spinner } from '../../components';
 import { useSelector, useDispatch } from 'react-redux';
 import { Icons } from '../../themes';
-import {
-	addTodos,
-	calledServer,
-	callingServer,
-	changeTypeAll,
-} from '../../actions';
-import { API } from '../../api/tasksAPI';
+import { createTask, isFinishAll } from '../../actions';
 
 function AddTodo({ inputRef }) {
 	const [valueInput, setValueInput] = useState('');
@@ -24,19 +16,12 @@ function AddTodo({ inputRef }) {
 	const dispatch = useDispatch();
 	const tasks = useSelector((state) => state.todos);
 
-	const { isLoading } = useSelector((state) => state.loading);
-
 	const handleSubmitTodo = (e) => {
 		if (e.keyCode === 13) {
-			if (valueInput.trim()) {
-				dispatch(callingServer());
-				API.createNewTask(valueInput)
-					.then((res) => {
-						dispatch(addTodos(res.data));
-						dispatch(calledServer());
-						setValueInput('');
-					})
-					.catch((err) => console.log(err));
+			if (valueInput) {
+				valueInput.trim();
+				dispatch(createTask(valueInput));
+				setValueInput('');
 			} else {
 				setValueInput('');
 			}
@@ -44,14 +29,8 @@ function AddTodo({ inputRef }) {
 	};
 
 	const handleFinishAll = () => {
-		dispatch(callingServer());
-		API.editTypeAll({ isCompleted: !isSelectAll })
-			.then(() => {
-				setIsSelectAll(!isSelectAll);
-				dispatch(changeTypeAll(!isSelectAll));
-				dispatch(calledServer());
-			})
-			.catch(() => console.log('Change fail'));
+		dispatch(isFinishAll({ isCompleted: !isSelectAll }));
+		setIsSelectAll(!isSelectAll);
 	};
 
 	useEffect(() => {

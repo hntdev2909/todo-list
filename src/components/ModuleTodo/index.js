@@ -7,17 +7,11 @@ import {
 } from './ModuleTodo.styles';
 import _ from 'lodash';
 import { useDispatch, useSelector } from 'react-redux';
-import {
-	loadData,
-	clearTaskCompleted,
-	callingServer,
-	calledServer,
-} from '../../actions';
+import { isFilter, isClearFinish } from '../../actions';
 import { API } from '../../api/tasksAPI';
 
 function ModuleTodo({ count, clear, callback }) {
 	const [borderActive, setBorderActive] = useState('all');
-	const tasks = useSelector((state) => state.todos);
 
 	const dispatch = useDispatch();
 
@@ -25,25 +19,13 @@ function ModuleTodo({ count, clear, callback }) {
 		if (borderActive === action) {
 			return;
 		} else {
-			dispatch(callingServer());
-			API.filtersType(action)
-				.then((res) => {
-					dispatch(loadData(res.data));
-					dispatch(calledServer());
-					setBorderActive(action);
-				})
-				.catch(() => console.log('FAIL'));
+			dispatch(isFilter(action));
+			setBorderActive(action);
 		}
 	};
 
 	const handleClearAll = () => {
-		dispatch(callingServer());
-		API.deleteAll()
-			.then(() => {
-				dispatch(clearTaskCompleted());
-				dispatch(calledServer());
-			})
-			.catch(() => console.log('Delete fail'));
+		dispatch(isClearFinish());
 	};
 
 	return (

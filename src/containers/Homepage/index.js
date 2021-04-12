@@ -10,6 +10,7 @@ import swal from 'sweetalert';
 import { AddTodo, TodoItem, ModuleTodo, Spinner } from '../../components';
 import _ from 'lodash';
 import { useSelector, useDispatch } from 'react-redux';
+import SweetAlert from 'react-swal';
 import { loadData } from '../../actions';
 
 function Homepage() {
@@ -31,7 +32,6 @@ function Homepage() {
 
 	useEffect(() => {
 		dispatch(loadData());
-
 		inputRef.current.focus();
 	}, []);
 
@@ -55,13 +55,17 @@ function Homepage() {
 		setListTodo(todos);
 	}, [todos]);
 
-	swal({
-		icon: icon,
-		title: title,
-		button: button,
-		dangerMode: dangerMode,
-		timer: timer,
-	});
+	useEffect(() => {
+		if ((!isLoading && icon) || title || button) {
+			swal({
+				icon: icon,
+				title: title,
+				button: button,
+				dangerMode: dangerMode,
+				timer: timer,
+			});
+		}
+	}, [todos, title]);
 
 	return (
 		<HomepageContent>

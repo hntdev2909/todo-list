@@ -24,6 +24,7 @@ const alertReducer = (state = initialState, action) => {
 				icon: 'error',
 				title: 'Failure',
 				button: 'OK',
+				dangerMode: true,
 			};
 
 		default:

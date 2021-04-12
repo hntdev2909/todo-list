@@ -72,12 +72,12 @@ const loadData = (param) => {
 		API.callListTask(param)
 			.then((res) => {
 				dispatch(loadDataAction(res.data));
-				dispatch(calledServer());
 				dispatch(loadingSuccess());
+				dispatch(calledServer());
 			})
 			.catch((err) => {
-				dispatch(calledServer());
 				dispatch(loadingFailure());
+				dispatch(calledServer());
 			});
 	};
 };
@@ -89,11 +89,9 @@ const createTask = (value) => {
 			.then((res) => {
 				dispatch(addTodosAction(res.data));
 				dispatch(calledServer());
-				dispatch(loadingSuccess());
 			})
 			.catch((err) => {
 				dispatch(calledServer());
-				dispatch(loadingFailure());
 			});
 	};
 };

@@ -9,9 +9,8 @@ import {
 	TodoItemDiv,
 } from './TodoItem.styles';
 import { Icons } from '../../themes';
-import { changeType, deleteTask, editTask } from '../../actions';
+import { changeType, editTask, deleteTask } from '../../actions';
 import { useDispatch } from 'react-redux';
-import { API } from '../../api/tasksAPI';
 
 function TodoItem({ todo, id }) {
 	const [isEdit, setIsEdit] = useState(false);
@@ -20,8 +19,7 @@ function TodoItem({ todo, id }) {
 	const dispatch = useDispatch();
 
 	const handleCompleted = (id) => {
-		dispatch(changeType(id));
-		API.editLisTask(id, { isCompleted: todo.isCompleted });
+		dispatch(changeType(id, { isCompleted: !todo.isCompleted }));
 	};
 
 	const handleEdit = (value) => {
@@ -31,36 +29,29 @@ function TodoItem({ todo, id }) {
 
 	const handleSubmitEdit = (e) => {
 		if (e.keyCode === 13) {
-			if (editValue.trim()) {
-				dispatch(editTask({ id, editValue }));
+			if (editValue) {
+				editValue.trim();
+				dispatch(editTask(id, { content: editValue }));
 				setIsEdit(!isEdit);
-				API.editLisTask(id, { content: editValue });
 			}
 		}
 	};
 
 	const handleDeleteTask = () => {
-		console.log(id);
 		dispatch(deleteTask(id));
-		API.deleteTask(id);
 	};
 
 	return (
 		<TodoItemContent>
 			<TodoIcon marginLeft="10px" onClick={() => handleCompleted(id)}>
-				<TodoImg
-					opacity="0.5"
-					width="35px"
-					height="35px"
-					src={Icons.circleIcon.default}
-				/>
-
-				{todo.isCompleted && (
+				{todo.isCompleted ? (
+					<TodoImg width="35px" height="35px" src={Icons.checkIcon.default} />
+				) : (
 					<TodoImg
-						position="absolute"
-						width="20px"
-						height="20px"
-						src={Icons.checkIcon.default}
+						opacity="0.5"
+						width="35px"
+						height="35px"
+						src={Icons.circleIcon.default}
 					/>
 				)}
 			</TodoIcon>

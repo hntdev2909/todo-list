@@ -1,50 +1,24 @@
-export const loadData = (value) => {
-	return {
-		type: 'loadData',
-		payload: value,
-	};
-};
+import { callingServer, calledServer } from './LoadingActions';
+import {
+	loadData,
+	editTask,
+	createTask,
+	changeType,
+	changeTypeAll,
+	deleteTask,
+	filters,
+	clearTask,
+} from './TodoActions';
 
-export const addTodos = (value) => {
-	return {
-		type: 'addTodos',
-		payload: value,
-	};
-};
-
-export const changeType = (value) => {
-	return {
-		type: 'changeType',
-		payload: value,
-	};
-};
-
-export const changeTypeAll = (value) => {
-	return {
-		type: 'changeTypeAll',
-		payload: value,
-	};
-};
-
-export const deleteTask = (value) => {
-	return {
-		type: 'deleteTask',
-		payload: value,
-	};
-};
-
-export const editTask = (value) => {
-	return {
-		type: 'editTask',
-		payload: {
-			id: value.id,
-			content: value.editValue,
-		},
-	};
-};
-
-export const clearTaskCompleted = () => {
-	return {
-		type: 'clearTaskCompleted',
-	};
+export {
+	callingServer,
+	calledServer,
+	loadData,
+	editTask,
+	createTask,
+	changeType,
+	changeTypeAll,
+	deleteTask,
+	filters,
+	clearTask,
 };

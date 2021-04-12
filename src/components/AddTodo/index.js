@@ -7,8 +7,7 @@ import {
 } from './AddTodo.styles';
 import { useSelector, useDispatch } from 'react-redux';
 import { Icons } from '../../themes';
-import { addTodos, changeTypeAll } from '../../actions';
-import { API } from '../../api/tasksAPI';
+import { createTask, changeTypeAll } from '../../actions';
 
 function AddTodo({ inputRef }) {
 	const [valueInput, setValueInput] = useState('');
@@ -19,11 +18,10 @@ function AddTodo({ inputRef }) {
 
 	const handleSubmitTodo = (e) => {
 		if (e.keyCode === 13) {
-			if (valueInput.trim()) {
+			if (valueInput) {
+				valueInput.trim();
+				dispatch(createTask(valueInput));
 				setValueInput('');
-				API.createNewTask(valueInput)
-					.then((res) => dispatch(addTodos(res.data)))
-					.catch((err) => console.log('Error', err));
 			} else {
 				setValueInput('');
 			}
@@ -31,11 +29,8 @@ function AddTodo({ inputRef }) {
 	};
 
 	const handleFinishAll = () => {
-		dispatch(changeTypeAll(!isSelectAll));
+		dispatch(changeTypeAll({ isCompleted: !isSelectAll }));
 		setIsSelectAll(!isSelectAll);
-		API.editTypeAll({ isCompleted: !isSelectAll })
-			.then(() => console.log('Change success'))
-			.catch(() => console.log('Change fail'));
 	};
 
 	useEffect(() => {

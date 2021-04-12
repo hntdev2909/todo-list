@@ -4,34 +4,29 @@ import {
 	HomepageTitle,
 	MainTodo,
 	Loading,
+	TodoList,
 } from './Homepage.styles';
 import { AddTodo, TodoItem, ModuleTodo, Spinner } from '../../components';
 import _ from 'lodash';
 import { useSelector, useDispatch } from 'react-redux';
 import { loadData } from '../../actions';
-import { API } from '../../api/tasksAPI';
 
 function Homepage() {
 	const [listTodo, setListTodo] = useState([]);
 	const [countSuccess, setCountSuccess] = useState(0);
 	const [clearSuccess, setClearSuccess] = useState(false);
-	const [isLoading, setIsLoading] = useState(false);
 	const inputRef = useRef(null);
 	const todos = useSelector((state) => state.todos);
 	const dispatch = useDispatch();
+
+	const { isLoading } = useSelector((state) => state.loading);
 
 	const handleChangeView = (action) => {
 		setListTodo(action);
 	};
 
 	useEffect(() => {
-		setIsLoading(true);
-		API.callListTask()
-			.then((res) => {
-				dispatch(loadData(res.data));
-				setIsLoading(false);
-			})
-			.catch((err) => err);
+		dispatch(loadData());
 
 		inputRef.current.focus();
 	}, []);
@@ -58,26 +53,24 @@ function Homepage() {
 
 	return (
 		<HomepageContent>
-			{isLoading && (
-				<Loading>
-					<Spinner />
-				</Loading>
-			)}
-
 			<HomepageTitle>todos</HomepageTitle>
-
 			<MainTodo>
-				<AddTodo inputRef={inputRef} />
-				{_.map(listTodo, (item, index) => {
-					return <TodoItem key={index} todo={item} id={item._id} />;
-				})}
-				{todos.length > 0 && (
-					<ModuleTodo
-						callback={handleChangeView}
-						count={countSuccess}
-						clear={clearSuccess}
-					/>
+				{isLoading && (
+					<Loading>
+						<Spinner />
+					</Loading>
 				)}
+				<AddTodo inputRef={inputRef} />
+				<TodoList>
+					{_.map(listTodo, (item, index) => {
+						return <TodoItem key={index} todo={item} id={item._id} />;
+					})}
+				</TodoList>
+				<ModuleTodo
+					callback={handleChangeView}
+					count={countSuccess}
+					clear={clearSuccess}
+				/>
 			</MainTodo>
 		</HomepageContent>
 	);

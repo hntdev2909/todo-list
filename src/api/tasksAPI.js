@@ -1,5 +1,6 @@
 import axios from 'axios';
-
+//https://server-intern-idra.herokuapp.com
+// http://localhost:5000
 const baseUrl = 'https://server-intern-idra.herokuapp.com/todolist';
 
 export const API = {
@@ -28,5 +29,9 @@ export const API = {
 
 	async editTypeAll(type) {
 		return await axios.put(baseUrl + `/change`, type);
+	},
+
+	async filtersType(type) {
+		return await axios.get(baseUrl + `/filters/${type}`);
 	},
 };

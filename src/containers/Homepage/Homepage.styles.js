@@ -11,7 +11,14 @@ const Loading = styled.div`
 	align-items: center;
 `;
 
+const TodoList = styled.div`
+	width: 100%;
+	max-height: 550px;
+	overflow: auto;
+`;
+
 const MainTodo = styled.div`
+	position: relative;
 	width: 100%;
 	max-width: 550px;
 	margin: 0 auto;
@@ -33,4 +40,4 @@ const HomepageContent = styled.div`
 	background-color: #f5f5f5;
 `;
 
-export { HomepageContent, HomepageTitle, MainTodo, Loading };
+export { HomepageContent, HomepageTitle, MainTodo, Loading, TodoList };
